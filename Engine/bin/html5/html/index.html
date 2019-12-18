@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+    <title>Emscripten-Generated Code</title>
+  </head>
+  <body  style=" margin: 0;  padding: 0 auto;" >
+
+  <canvas id="canvas" onclick="can.requestPointerLock()" oncontextmenu="event.preventDefault()" style="position:absolute; left: 0px; top: 0px; z-index:1;" ></canvas>
+  
+  <style>
+  .istyle{
+    position: absolute;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    
+  }
+  </style>
+  
+  <img id="logo" src="res/logo.jpg" class="istyle" style="left: 390px;top: 140px;" class="istyle" width="180" height="180"></img>
+  <div id="bgBar" style="left:300px;top:320px;position:absolute;width:360px;height:2px;background-color:grey;"></div>
+  <div id="progress" style="left:300px;top:320px;position:absolute;width:0px;height:2px;background-color:white;"></div>
+  <small id="status" style="left:390px;top:340px;position:absolute;color:grey;
+  font-family:Ariel;font-size:14px"> [  DOWNLOADING DATA  ] </small>
+  
+  
+  <div style="background-color:#161616 ;height:540px;"></div>
+     
+  <img id="link" class="istyle" src="res/duck.jpg" width="60" height="60" onclick=""></img>
+  <img id="fullscr"  src="res/fsc.jpg" style="position: absolute; left: 900px; " width="60" height="60" 
+    onclick="
+        if (can.requestFullscreen) {
+        can.requestFullscreen();
+        } else if (can.webkitRequestFullscreen) {
+        can.webkitRequestFullscreen();
+        } else if (can.mozRequestFullScreen) {
+        can.mozRequestFullScreen();
+        } else if (can.msRequestFullscreen) {
+        can.msRequestFullscreen();
+        }  ">
+  </img>
+     
+  </body>
+
+
+    <script >
+	
+ 	var can=document.getElementById('canvas');      
+      	var gl=can.getContext('webgl', { antialias: false });
+      	var progress=document.getElementById('progress');
+      	var textelement=document.getElementById('status');
+
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "out.res", true);
+	xhr.responseType = 'arraybuffer';
+	xhr.onprogress = function(event) {
+		var curr=(parseFloat(event.loaded)/1024/1024).toFixed(2); 
+                var max =(parseFloat(event.total)/1024/1024).toFixed(2);
+		textelement.innerHTML="[  DOWNLOADING"+" "+curr+" of "+max+" MB]";
+		progress.style.width=curr/max*360+"px";
+	};
+	xhr.onload = function(event) {
+        	var packageData = xhr.response;
+		//Module['FS_createDataFile']("/","out.res",packageData, true, true);
+		//alert("okayyy!");
+	};
+	xhr.onerror=function(){
+		alert("errorrrrrr!");
+	}
+	xhr.send();
+	
+
+      can.requestPointerLock =function(){} //can.requestPointerLock ;//|| can.mozRequestPointerLock;
+      /*
+      var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      if(!isChrome)can.requestPointerLock=function(){}; 
+      */
+      
+      var Module = {
+        TOTAL_MEMORY: 268435456,
+        canvas:can,
+        setStatus: function(text) {
+            var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+            if (m) {
+                text = m[1];
+                var curr=(parseFloat(m[2])/1024/1024).toFixed(2); 
+                var max =(parseFloat(m[4])/1024/1024).toFixed(2);
+                textelement.innerHTML="[  DOWNLOADING"+" "+curr+" of "+max+" MB]";
+                textelement.style.left=360+"px";
+                progress.style.width=curr/max*360+"px";
+            }
+            else{
+                if(text="Running...")
+                    textelement.innerHTML="RUNNING";
+                else
+                    textelement.innerHTML=text;
+                textelement.style.left=450+"px";
+//                 progress.hidden=true;
+                document.getElementById('bgBar').hidden=true;
+                document.getElementById('logo').hidden=true;
+//                 document.body.removeChild(document.getElementById('logo'));
+//                 document.body.removeChild(document.getElementById('bgbar'));
+            }
+        },
+	preRun: function(){
+		FS.createPreloadedFile("/","out.res","out.res",true,true);
+		//alert("success");
+	}
+      };
+
+
+    </script>
+   <script > 
+
+ </script >
+<script src="out.js"></script>
+ 
+</html>
