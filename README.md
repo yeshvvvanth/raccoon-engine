@@ -19,5 +19,5 @@ It can be built for :
 * Run `make setup` to install the dependencies.
 * Then ,run `make editor` to compile the editor and run it.
 
-[Death of a Scorpion]: https://github.io/yeshvvvanth/racoon-engine/dos
-[First Person Demo]: https://github.io/yeshvvvanth/racoon-engine/fps_demo
+[Death of a Scorpion]: https://yeshvvvanth.github.io/raccoon-engine/dos
+
