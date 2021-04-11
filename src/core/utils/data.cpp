@@ -14,18 +14,18 @@ Data::Data(std::string d_path)
       //throw "Resource File Wasn't Found !\n";
       exit(0);
   }
-  unsigned short num_ass=0,sha_num=0,scn_num=0,num_eass=0;
-  ifs.read((char*)&sha_num,sizeof(sha_num));
-  ifs.read((char*)&num_eass,sizeof(num_eass));
-  ifs.read((char*)&num_ass,sizeof(num_ass));
-  ifs.read((char*)&scn_num,sizeof(scn_num));
-  if(sha_num==0){perror("No Shader Source!\n");exit(0);}
-  loadShaders(ifs,sha_num);
-  loadAssets(ifs,num_eass,true);
+  unsigned short num_assets=0,num_shaders=0,num_scenes=0,num_editor_assets=0;
+  ifs.read((char*)&num_shaders,sizeof(num_shaders));
+  ifs.read((char*)&num_editor_assets,sizeof(num_editor_assets));
+  ifs.read((char*)&num_assets,sizeof(num_assets));
+  ifs.read((char*)&num_scenes,sizeof(num_scenes));
+  if(num_shaders==0){perror("No Shader Source!\n");exit(0);}
+  loadShaders(ifs,num_shaders);
+  loadAssets(ifs,num_editor_assets,true);
   fpos=ifs.tellg();
-  loadAssets(ifs,num_ass,false);
+  loadAssets(ifs,num_assets,false);
   Font::init();
-  loadScenes(ifs,scn_num);
+  loadScenes(ifs,num_scenes);
   
   loadPrefs(ifs);
 }

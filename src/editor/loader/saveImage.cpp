@@ -10,14 +10,14 @@ struct Cmap{
 };
 std::vector<Cmap*> Cmap::cmaps;
 ///////////////////////////////////////////////////////////////////
-void saveImage(std::ofstream& ofs,std::string& str,std::string& name,Ushort &ass_num)
+void saveImage(std::ofstream& ofs,std::string& file_path,std::string& name,Ushort &ass_num)
 {
     unsigned char type=2;     // ******10
     
     if(name.compare(0,3,"cm_")==0){type+=4; for(int j=0;j<6;j++)printf("cubemap %s \n",name.c_str());}
     
     if(type==2){
-        saveRaw(ofs,str,name,2);
+        saveRaw(ofs,file_path,name,2);
         ass_num++;
     }
     else{
@@ -37,7 +37,7 @@ void saveImage(std::ofstream& ofs,std::string& str,std::string& name,Ushort &ass
             for(int j=0;j<6;j++)
                 cm->buffers[j]=0;
         }
-        std::ifstream ifs(str.c_str(),std::ios::binary);
+        std::ifstream ifs(file_path.c_str(),std::ios::binary);
         int len=0;
         unsigned char *mem=0;
         ifs.seekg(0,std::ios::end);

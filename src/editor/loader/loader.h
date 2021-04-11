@@ -5,21 +5,23 @@
 #include<dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <filesystem>
 
 typedef unsigned short Ushort;
+namespace fs = std::filesystem;
 
 #define _SHADER_FOLDER "shaders/"
 #define _IN_FOLDER "assets/"
 #define _OUT "res/out.res"
-#define _NOTFOLDER (drnt->d_type!=DT_DIR &&drnt->d_name[0]!= '.'&& drnt->d_name[strlen(drnt->d_name)-1]!='~')
+#define _NOTFOLDER  fs::is_directory(dirname)
 
-#define _MODEL (strcmp(drnt->d_name+strlen(drnt->d_name)-4,".FML")==0)
-#define _SCENE (strcmp(drnt->d_name+strlen(drnt->d_name)-6,".scene")==0) && _NOTFOLDER
-#define iimg(txt) strcmp(drnt->d_name+strlen(drnt->d_name)-4,txt)==0
-#define _IMAGE (iimg(".jpg")||iimg(".png")||iimg(".tga")||iimg(".bmp"))
-#define _AUDIO (strcmp(drnt->d_name+strlen(drnt->d_name)-4,".ogg")==0)
-#define _SCRIPT (strcmp(drnt->d_name+strlen(drnt->d_name)-4,".lua")==0)
-#define _FONT   (strcmp(drnt->d_name+strlen(drnt->d_name)-4,".otf")==0||strcmp(drnt->d_name+strlen(drnt->d_name)-4,".ttf")==0)
+#define _MODEL (extension.compare(".FML")==0)
+#define _SCENE (extension.compare(".scene")==0) && _NOTFOLDER
+#define is_img(txt) extension.compare(txt)==0
+#define _IMAGE (is_img(".jpg")||is_img(".png")||is_img(".tga")||is_img(".bmp"))
+#define _AUDIO (extension.compare(".ogg")==0)
+#define _SCRIPT (extension.compare(".lua")==0)
+#define _FONT   (extension.compare(".otf")==0||extension.compare(".ttf")==0)
 
 void loadAss(std::string,std::string);
 void saveImage(std::ofstream& ofs,std::string& str,std::string& name,Ushort &ass_num);
